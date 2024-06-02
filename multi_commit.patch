@@ -1,0 +1,336 @@
+From 5b459af18dcd3f22f886f3e51ebd16c8d76cb065 Mon Sep 17 00:00:00 2001
+From: Rajesh Yaksho <codelim7@gmail.com>
+Date: Thu, 23 May 2024 12:52:00 -0500
+Subject: [PATCH 1/3] Initial commit
+
+---
+ src/App.tsx | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/src/App.tsx b/src/App.tsx
+index 0728518..0e9507e 100755
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -8,6 +8,7 @@ import './App.css';
+  */
+ interface IState {
+   data: ServerRespond[],
++  showGraph: boolean,
+ }
+ 
+ /**
+@@ -22,6 +23,7 @@ class App extends Component<{}, IState> {
+       // data saves the server responds.
+       // We use this state to parse data down to the child element (Graph) as element property
+       data: [],
++      showGraph: false,
+     };
+   }
+ 
+@@ -29,18 +31,28 @@ class App extends Component<{}, IState> {
+    * Render Graph react component with state.data parse as property data
+    */
+   renderGraph() {
+-    return (<Graph data={this.state.data}/>)
++    if (this.state.showGraph) {
++      return (<Graph data={this.state.data}/>)
++    }
+   }
+ 
+   /**
+    * Get new data from server and update the state with the new data
+    */
+   getDataFromServer() {
+-    DataStreamer.getData((serverResponds: ServerRespond[]) => {
+-      // Update the state by creating a new array of data that consists of
+-      // Previous data in the state and the new data from server
+-      this.setState({ data: [...this.state.data, ...serverResponds] });
+-    });
++    let x = 0;
++    const interval = setInterval (() => {
++      DataStreamer.getData((serverResponds: ServerRespond[]) => {
++        this.setState({
++          data: serverResponds,
++          showGraph: true,
++        });
++      });
++      x++;
++      if (x > 1000) {
++        clearInterval(interval);
++      }
++    }, 100);
+   }
+ 
+   /**
+-- 
+2.44.0
+
+
+From 14595757f675c7309951b7f228e7ef0acd5db7f9 Mon Sep 17 00:00:00 2001
+From: Rajesh Yaksho <161411895+rajeshyaksho@users.noreply.github.com>
+Date: Sun, 2 Jun 2024 17:12:10 +0000
+Subject: [PATCH 2/3] Initial commit
+
+---
+ package-lock.json | 38 +++++++++++++++++++-------------------
+ package.json      | 10 +++++-----
+ 2 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/package-lock.json b/package-lock.json
+index 21b4315..ca44437 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -14,18 +14,18 @@
+         "@finos/perspective-viewer-datagrid": "^1.6.2",
+         "@types/jest": "^23.3.13",
+         "@types/node": "^10.12.19",
+-        "@types/react": "^16.9.0",
+-        "@types/react-dom": "^16.0.11",
++        "@types/react": "^16.14.60",
++        "@types/react-dom": "^16.9.24",
+         "bootstrap": "^4.2.1",
+         "puppeteer": "^1.19.0",
+-        "react": "^16.9.0",
+-        "react-dom": "^16.9.0",
++        "react": "^16.14.0",
++        "react-dom": "^16.14.0",
+         "react-scripts": "2.1.3"
+       },
+       "devDependencies": {
+         "awesome-typescript-loader": "^5.2.1",
+         "source-map-loader": "^0.2.4",
+-        "typescript": "^3.2.4"
++        "typescript": "^3.9.10"
+       }
+     },
+     "node_modules/@ampproject/remapping": {
+@@ -2309,19 +2309,19 @@
+       "integrity": "sha512-L28j2FcJfSZOnL1WBjDYp2vUHCeIFlyYI/53EwD/rKUBQ7MtUUfbQWiyKJGpcnv4/WgrhWsFKrcPstcAt/J0tQ=="
+     },
+     "node_modules/@types/react": {
+-      "version": "16.14.29",
+-      "resolved": "https://registry.npmjs.org/@types/react/-/react-16.14.29.tgz",
+-      "integrity": "sha512-I5IwEaefGZbpmmK1J7zHwZe3JkGxcRkc5WJUDWmNySVVovueViRTEUWV7spTvpe96l3nbKD/K6+GxoN69CYb/w==",
++      "version": "16.14.60",
++      "resolved": "https://registry.npmjs.org/@types/react/-/react-16.14.60.tgz",
++      "integrity": "sha512-wIFmnczGsTcgwCBeIYOuy2mdXEiKZ5znU/jNOnMZPQyCcIxauMGWlX0TNG4lZ7NxRKj7YUIZRneJQSSdB2jKgg==",
+       "dependencies": {
+         "@types/prop-types": "*",
+-        "@types/scheduler": "*",
++        "@types/scheduler": "^0.16",
+         "csstype": "^3.0.2"
+       }
+     },
+     "node_modules/@types/react-dom": {
+-      "version": "16.9.16",
+-      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.9.16.tgz",
+-      "integrity": "sha512-Oqc0RY4fggGA3ltEgyPLc3IV9T73IGoWjkONbsyJ3ZBn+UPPCYpU2ec0i3cEbJuEdZtkqcCF2l1zf2pBdgUGSg==",
++      "version": "16.9.24",
++      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.9.24.tgz",
++      "integrity": "sha512-Gcmq2JTDheyWn/1eteqyzzWKSqDjYU6KYsIvH7thb7CR5OYInAWOX+7WnKf6PaU/cbdOc4szJItcDEJO7UGmfA==",
+       "dependencies": {
+         "@types/react": "^16"
+       }
+@@ -21951,19 +21951,19 @@
+       "integrity": "sha512-L28j2FcJfSZOnL1WBjDYp2vUHCeIFlyYI/53EwD/rKUBQ7MtUUfbQWiyKJGpcnv4/WgrhWsFKrcPstcAt/J0tQ=="
+     },
+     "@types/react": {
+-      "version": "16.14.29",
+-      "resolved": "https://registry.npmjs.org/@types/react/-/react-16.14.29.tgz",
+-      "integrity": "sha512-I5IwEaefGZbpmmK1J7zHwZe3JkGxcRkc5WJUDWmNySVVovueViRTEUWV7spTvpe96l3nbKD/K6+GxoN69CYb/w==",
++      "version": "16.14.60",
++      "resolved": "https://registry.npmjs.org/@types/react/-/react-16.14.60.tgz",
++      "integrity": "sha512-wIFmnczGsTcgwCBeIYOuy2mdXEiKZ5znU/jNOnMZPQyCcIxauMGWlX0TNG4lZ7NxRKj7YUIZRneJQSSdB2jKgg==",
+       "requires": {
+         "@types/prop-types": "*",
+-        "@types/scheduler": "*",
++        "@types/scheduler": "^0.16",
+         "csstype": "^3.0.2"
+       }
+     },
+     "@types/react-dom": {
+-      "version": "16.9.16",
+-      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.9.16.tgz",
+-      "integrity": "sha512-Oqc0RY4fggGA3ltEgyPLc3IV9T73IGoWjkONbsyJ3ZBn+UPPCYpU2ec0i3cEbJuEdZtkqcCF2l1zf2pBdgUGSg==",
++      "version": "16.9.24",
++      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.9.24.tgz",
++      "integrity": "sha512-Gcmq2JTDheyWn/1eteqyzzWKSqDjYU6KYsIvH7thb7CR5OYInAWOX+7WnKf6PaU/cbdOc4szJItcDEJO7UGmfA==",
+       "requires": {
+         "@types/react": "^16"
+       }
+diff --git a/package.json b/package.json
+index ca234e9..33cd7ff 100644
+--- a/package.json
++++ b/package.json
+@@ -9,12 +9,12 @@
+     "@finos/perspective-viewer-datagrid": "^1.6.2",
+     "@types/jest": "^23.3.13",
+     "@types/node": "^10.12.19",
+-    "@types/react": "^16.9.0",
+-    "@types/react-dom": "^16.0.11",
++    "@types/react": "^16.14.60",
++    "@types/react-dom": "^16.9.24",
+     "bootstrap": "^4.2.1",
+     "puppeteer": "^1.19.0",
+-    "react": "^16.9.0",
+-    "react-dom": "^16.9.0",
++    "react": "^16.14.0",
++    "react-dom": "^16.14.0",
+     "react-scripts": "2.1.3"
+   },
+   "scripts": {
+@@ -35,6 +35,6 @@
+   "devDependencies": {
+     "awesome-typescript-loader": "^5.2.1",
+     "source-map-loader": "^0.2.4",
+-    "typescript": "^3.2.4"
++    "typescript": "^3.9.10"
+   }
+ }
+-- 
+2.44.0
+
+
+From d5a9d27591bb241457c2e9ed8ea52baf14988e6f Mon Sep 17 00:00:00 2001
+From: Rajesh Yaksho <161411895+rajeshyaksho@users.noreply.github.com>
+Date: Sun, 2 Jun 2024 17:39:37 +0000
+Subject: [PATCH 3/3] Patch File
+
+---
+ 0001-Initial-commit.patch | 124 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 124 insertions(+)
+ create mode 100644 0001-Initial-commit.patch
+
+diff --git a/0001-Initial-commit.patch b/0001-Initial-commit.patch
+new file mode 100644
+index 0000000..75b3185
+--- /dev/null
++++ b/0001-Initial-commit.patch
+@@ -0,0 +1,124 @@
++From 14595757f675c7309951b7f228e7ef0acd5db7f9 Mon Sep 17 00:00:00 2001
++From: Rajesh Yaksho <161411895+rajeshyaksho@users.noreply.github.com>
++Date: Sun, 2 Jun 2024 17:12:10 +0000
++Subject: [PATCH] Initial commit
++
++---
++ package-lock.json | 38 +++++++++++++++++++-------------------
++ package.json      | 10 +++++-----
++ 2 files changed, 24 insertions(+), 24 deletions(-)
++
++diff --git a/package-lock.json b/package-lock.json
++index 21b4315..ca44437 100644
++--- a/package-lock.json
+++++ b/package-lock.json
++@@ -14,18 +14,18 @@
++         "@finos/perspective-viewer-datagrid": "^1.6.2",
++         "@types/jest": "^23.3.13",
++         "@types/node": "^10.12.19",
++-        "@types/react": "^16.9.0",
++-        "@types/react-dom": "^16.0.11",
+++        "@types/react": "^16.14.60",
+++        "@types/react-dom": "^16.9.24",
++         "bootstrap": "^4.2.1",
++         "puppeteer": "^1.19.0",
++-        "react": "^16.9.0",
++-        "react-dom": "^16.9.0",
+++        "react": "^16.14.0",
+++        "react-dom": "^16.14.0",
++         "react-scripts": "2.1.3"
++       },
++       "devDependencies": {
++         "awesome-typescript-loader": "^5.2.1",
++         "source-map-loader": "^0.2.4",
++-        "typescript": "^3.2.4"
+++        "typescript": "^3.9.10"
++       }
++     },
++     "node_modules/@ampproject/remapping": {
++@@ -2309,19 +2309,19 @@
++       "integrity": "sha512-L28j2FcJfSZOnL1WBjDYp2vUHCeIFlyYI/53EwD/rKUBQ7MtUUfbQWiyKJGpcnv4/WgrhWsFKrcPstcAt/J0tQ=="
++     },
++     "node_modules/@types/react": {
++-      "version": "16.14.29",
++-      "resolved": "https://registry.npmjs.org/@types/react/-/react-16.14.29.tgz",
++-      "integrity": "sha512-I5IwEaefGZbpmmK1J7zHwZe3JkGxcRkc5WJUDWmNySVVovueViRTEUWV7spTvpe96l3nbKD/K6+GxoN69CYb/w==",
+++      "version": "16.14.60",
+++      "resolved": "https://registry.npmjs.org/@types/react/-/react-16.14.60.tgz",
+++      "integrity": "sha512-wIFmnczGsTcgwCBeIYOuy2mdXEiKZ5znU/jNOnMZPQyCcIxauMGWlX0TNG4lZ7NxRKj7YUIZRneJQSSdB2jKgg==",
++       "dependencies": {
++         "@types/prop-types": "*",
++-        "@types/scheduler": "*",
+++        "@types/scheduler": "^0.16",
++         "csstype": "^3.0.2"
++       }
++     },
++     "node_modules/@types/react-dom": {
++-      "version": "16.9.16",
++-      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.9.16.tgz",
++-      "integrity": "sha512-Oqc0RY4fggGA3ltEgyPLc3IV9T73IGoWjkONbsyJ3ZBn+UPPCYpU2ec0i3cEbJuEdZtkqcCF2l1zf2pBdgUGSg==",
+++      "version": "16.9.24",
+++      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.9.24.tgz",
+++      "integrity": "sha512-Gcmq2JTDheyWn/1eteqyzzWKSqDjYU6KYsIvH7thb7CR5OYInAWOX+7WnKf6PaU/cbdOc4szJItcDEJO7UGmfA==",
++       "dependencies": {
++         "@types/react": "^16"
++       }
++@@ -21951,19 +21951,19 @@
++       "integrity": "sha512-L28j2FcJfSZOnL1WBjDYp2vUHCeIFlyYI/53EwD/rKUBQ7MtUUfbQWiyKJGpcnv4/WgrhWsFKrcPstcAt/J0tQ=="
++     },
++     "@types/react": {
++-      "version": "16.14.29",
++-      "resolved": "https://registry.npmjs.org/@types/react/-/react-16.14.29.tgz",
++-      "integrity": "sha512-I5IwEaefGZbpmmK1J7zHwZe3JkGxcRkc5WJUDWmNySVVovueViRTEUWV7spTvpe96l3nbKD/K6+GxoN69CYb/w==",
+++      "version": "16.14.60",
+++      "resolved": "https://registry.npmjs.org/@types/react/-/react-16.14.60.tgz",
+++      "integrity": "sha512-wIFmnczGsTcgwCBeIYOuy2mdXEiKZ5znU/jNOnMZPQyCcIxauMGWlX0TNG4lZ7NxRKj7YUIZRneJQSSdB2jKgg==",
++       "requires": {
++         "@types/prop-types": "*",
++-        "@types/scheduler": "*",
+++        "@types/scheduler": "^0.16",
++         "csstype": "^3.0.2"
++       }
++     },
++     "@types/react-dom": {
++-      "version": "16.9.16",
++-      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.9.16.tgz",
++-      "integrity": "sha512-Oqc0RY4fggGA3ltEgyPLc3IV9T73IGoWjkONbsyJ3ZBn+UPPCYpU2ec0i3cEbJuEdZtkqcCF2l1zf2pBdgUGSg==",
+++      "version": "16.9.24",
+++      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.9.24.tgz",
+++      "integrity": "sha512-Gcmq2JTDheyWn/1eteqyzzWKSqDjYU6KYsIvH7thb7CR5OYInAWOX+7WnKf6PaU/cbdOc4szJItcDEJO7UGmfA==",
++       "requires": {
++         "@types/react": "^16"
++       }
++diff --git a/package.json b/package.json
++index ca234e9..33cd7ff 100644
++--- a/package.json
+++++ b/package.json
++@@ -9,12 +9,12 @@
++     "@finos/perspective-viewer-datagrid": "^1.6.2",
++     "@types/jest": "^23.3.13",
++     "@types/node": "^10.12.19",
++-    "@types/react": "^16.9.0",
++-    "@types/react-dom": "^16.0.11",
+++    "@types/react": "^16.14.60",
+++    "@types/react-dom": "^16.9.24",
++     "bootstrap": "^4.2.1",
++     "puppeteer": "^1.19.0",
++-    "react": "^16.9.0",
++-    "react-dom": "^16.9.0",
+++    "react": "^16.14.0",
+++    "react-dom": "^16.14.0",
++     "react-scripts": "2.1.3"
++   },
++   "scripts": {
++@@ -35,6 +35,6 @@
++   "devDependencies": {
++     "awesome-typescript-loader": "^5.2.1",
++     "source-map-loader": "^0.2.4",
++-    "typescript": "^3.2.4"
+++    "typescript": "^3.9.10"
++   }
++ }
++-- 
++2.44.0
++
+-- 
+2.44.0
+
