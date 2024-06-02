@@ -1,0 +1,17 @@
+From da7e5b60f52c8debf451b6012f6c858048459fb5 Mon Sep 17 00:00:00 2001
+From: Joe Ferrer <joe@theforage.com>
+Date: Wed, 1 Mar 2023 00:58:30 +1100
+Subject: [PATCH] Move python files to datafeed dir
+
+---
+ server.py => datafeed/server3.py | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename server.py => datafeed/server3.py (100%)
+
+diff --git a/server.py b/datafeed/server3.py
+similarity index 100%
+rename from server.py
+rename to datafeed/server3.py
+-- 
+2.44.0
+
